@@ -1,5 +1,5 @@
 module Jekyll
-  module Youtube
+  module Graphiql
     VERSION = "1.0.0"
   end
 end
