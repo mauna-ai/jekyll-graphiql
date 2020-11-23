@@ -14,22 +14,28 @@ class GraphiqlEmbed < Liquid::Tag
     view_only = @params[:view_only] || false
     query     = @params[:query]     || ""
     response  = @params[:response]  || ""
-    endpoint  = @params[:endpoint]
+    endpoint  = @params[:endpoint]  || "/graphql"
     
-    %Q{
-    <div class="graphiql #{ view_only ? "view-only" : ""}">
-    Loading...
-      <div class="endpoint">
-      #{ endpoint }
-      </div>
-      <div class="query">
-      #{ query }
-      </div>
-      <div class="response">
-      #{ response }
-      </div>
-    </div>
-    }
+    # Need to do this dance because multiline strings include indentation and
+    # that messes up the output.
+    # 
+    # See: https://github.com/Shopify/liquid/issues/136#issuecomment-19178257
+    output = ""
+
+    output += "<div class=\"graphiql #{ view_only ? "view-only" : ""}\">"
+    output += 'Loading...'
+    output +=   '<div class="endpoint">'
+    output +=   endpoint
+    output +=   '</div>'
+    output +=   '<div class="query">'
+    output +=   query
+    output +=   '</div>'
+    output +=   '<div class="response">'
+    output +=   response
+    output +=   '</div>'
+    output += '</div>'
+
+    return output
   end
 
   Liquid::Template.register_tag "graphiql", self
